@@ -10,7 +10,7 @@ on:
 jobs:
     unit-testing:
         name: Unit Testing
-        runs-on: self-hosted
+        runs-on: ubuntu-latest
        
         strategy:
           matrix:
@@ -31,7 +31,7 @@ jobs:
         needs: [unit-testing]
         permissions:
           packages: write
-        runs-on: self-hosted
+        runs-on: ubuntu-latest
         steps:
           - name: Checkout Repo
             uses: actions/checkout@v4
@@ -68,7 +68,7 @@ jobs:
           - name: Verify container is running
             run: |
                 docker ps
-    #             docker logs react
+                docker logs react
 
           - name: Container Registry Push
             uses: docker/build-push-action@v6
@@ -80,7 +80,7 @@ jobs:
                 ghcr.io/${{github.repository_owner}}/react:${{ github.sha }}
     dev-deploy:
       needs: docker
-      runs-on: self-hosted
+      runs-on: ubuntu-latest
       steps:
         - name: Checkout Repo
           uses: actions/checkout@v4
@@ -90,6 +90,6 @@ jobs:
             version: 'v1.30.2'
         - name: Fetch kubernetes details
           run:
-            kubectl version --short
+            kubectl version --client
 
             kubectl get nodes

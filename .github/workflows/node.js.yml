@@ -54,6 +54,7 @@ jobs:
           - name: Docker images testing
             run: |
                 docker images
+                docker built -t  ${{ vars.DOCKERHUB_USERNAME }}/reactjs:${{ github.sha }}
                 docker run --name react -d -p 3002:3002 ${{ vars.DOCKERHUB_USERNAME }}/reactjs:${{ github.sha }} .
       
           - name: Verify container is running

@@ -15,7 +15,7 @@ jobs:
         strategy:
           matrix:
             node-version: [16.x]
-        # #See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
         steps:
         - uses: actions/checkout@v3
@@ -47,14 +47,14 @@ jobs:
             uses: docker/build-push-action@v6
             with:
               context: .
-              tags: karthick/react:${{ github.sha }}
+              tags: ${{ vars.DOCKERHUB_USERNAME }}/react:${{ github.sha }}
               push: false
                
 
           - name: Docker images testing
             run: |
                 docker images
-                docker run --name react -d -p 3002:3002 karthick/react:${{ github.sha }} .
+                docker run --name react -d -p 3002:3002 ${{ vars.DOCKERHUB_USERNAME }}/react:${{ github.sha }} .
       
           - name: Verify container is running
             run: |

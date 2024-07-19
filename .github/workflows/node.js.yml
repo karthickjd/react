@@ -67,4 +67,18 @@ jobs:
                context: .
                push: true
                tags: ${{ vars.DOCKERHUB_USERNAME }}/react:${{ github.sha }}
-              
+    dev-deploy:
+      needs: docker
+      runs-on: self-hosted
+      steps:
+        - name: Checkout Repo
+          uses: actions/checkout@v4
+        - name: Install kubectl Cli
+          uses: azure/setup-kubectl@v3
+          with:
+            version: 'v1.26.0'
+        - name: Fetch kubernetes details
+          run:
+            kubectl version --short
+            echo ------------------------
+            kubectl get nodes

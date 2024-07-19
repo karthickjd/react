@@ -46,9 +46,10 @@ jobs:
             uses: docker/build-push-action@v6
             with:
               context: .
+              file: ./Dockerfile
+              tags: user/app:latest
               push: false
-              tags: |
-                 nodejs/react:latest 
+               
 
           - name: Docker images testing
             run: |

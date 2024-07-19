@@ -47,14 +47,14 @@ jobs:
             uses: docker/build-push-action@v6
             with:
               context: .
-              tags: ${{ vars.DOCKERHUB_USERNAME }}/react:${{ github.sha }}
+              tags: karthick/react:${{ github.sha }}
               push: false
                
 
           - name: Docker images testing
             run: |
                 docker images
-                docker run --name react -d -p 3002:3002 ${{ vars.DOCKERHUB_USERNAME }}/react:${{ github.sha }} .
+                docker run --name react -d -p 3002:3002 karthick/react:${{ github.sha }} .
       
           - name: Verify container is running
             run: |

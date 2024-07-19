@@ -1,4 +1,4 @@
-name: Solar System Workflow
+name: React Workflow
 
 on: 
   workflow_dispatch:
@@ -54,7 +54,7 @@ jobs:
           - name: Docker images testing
             run: |
                 docker images
-                docker run --name react -d -p 3002:3002 ${{ vars.DOCKERHUB_USERNAME }}/react:${{ github.sha }}
+                docker run --name react -d -p 3002:3002 ${{ vars.DOCKERHUB_USERNAME }}/react:${{ github.sha }} .
       
           - name: Verify container is running
             run: |

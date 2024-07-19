@@ -16,6 +16,9 @@ COPY . .
 # Build the application (if applicable, e.g., for React, Angular)
 RUN npm run build
 
+# Create the directory for Nginx configuration if it doesn't exist
+RUN mkdir -p /etc/nginx
+
 # Stage 2: Set up Nginx to serve the application
 FROM nginx:alpine
 

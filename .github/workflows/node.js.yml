@@ -120,3 +120,6 @@ jobs:
         - name: check files
           run: |
            cat kubernetes/development/*.yaml
+        - name: deploy to dev env
+          run: | 
+           kubectl apply -f kubernetes/development

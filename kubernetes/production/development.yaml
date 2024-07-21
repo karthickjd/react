@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: react
+  name: react
+  namespace: _{_NAMESPACE_}_
+spec:
+  replicas: _{_REPLICAS_}_
+  selector:
+    matchLabels:
+      app: react
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: react
+    spec:
+      containers:
+      - image: _{_IMAGE_}_
+        imagePullPolicy: Always
+        name: react
+        ports:
+        - containerPort: 3000
+          name: http
+          protocol: TCP
+        

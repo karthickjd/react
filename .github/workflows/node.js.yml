@@ -62,9 +62,18 @@ jobs:
 
           - name: Docker images testing
             run: |
-                docker pull ${{ vars.DOCKERHUB_USERNAME }}/react:${{ github.sha }}
-                docker run --name react -d -p 3002:3002 ${{ vars.DOCKERHUB_USERNAME }}/react:${{ github.sha }} .
+              # Remove existing container if it exists
+
+              if [ "$(docker ps -aq -f name=react)" ]; then
+              docker stop react || true
+              docker rm react || true
+              fi
       
+              # Pull and run the new image
+              
+              docker pull ${{ vars.DOCKERHUB_USERNAME }}/react:${{ github.sha }}
+              docker run --name react -d -p 3002:3002 ${{ vars.DOCKERHUB_USERNAME }}/react:${{ github.sha }}
+          
           - name: Verify container is running
             run: |
                 docker ps

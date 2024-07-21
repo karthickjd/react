@@ -8,7 +8,8 @@ metadata:
   namespace: _{_NAMESPACE_}_
 spec:
     rules:
-    - host: react-{NAMESPACE}.{INGRESS_IP}.nip.io
+    - host: react-development.192.168.0.194.nip.io
+
       http:
         paths:
         - backend:
@@ -20,5 +21,5 @@ spec:
           pathType: Prefix
     tls:
     - hosts:
-      - react-{NAMESPACE}.{INGRESS_IP}.nip.io
+      - react-development.192.168.0.194.nip.io
       secretName: ingress-local-tls

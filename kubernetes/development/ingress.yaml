@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  name: react
+  namespace: _{_NAMESPACE_}_
+spec:
+    rules:
+    - host: react-_{_NAMESPACE_}_._{_INGRESS_IP_}_.nip.io
+      http:
+        paths:
+        - backend:
+            service:
+              name: react
+              port:
+                number: 3000
+          path: /
+          pathType: Prefix
+    tls:
+    - hosts:
+      - react-_{_NAMESPACE_}_._{_INGRESS_IP_}_.nip.io
+      secretName: ingress-local-tls

@@ -154,9 +154,17 @@ jobs:
             env:
               URL: ${{needs.dev-deploy.outputs.APP_INGRESS_URL}}
             run: |
-             echo $URL
-             echo "---------------------------"
-             curl https://$URL/
+               echo "URL: $URL"
+               echo "---------------------------"
+        
+               # Validate the URL format
+               if [[ -z "$URL" || ! "$URL" =~ ^https?:// ]]; then
+               echo "Error: Invalid URL format: $URL"
+               exit 1
+               fi
+        
+               # Make the curl request
+               curl "$URL/"
      
     prod-deploy:
       needs: dev-intergration-testing
@@ -223,7 +231,14 @@ jobs:
             env:
               URL: ${{needs.prod-deploy-deploy.outputs.APP_INGRESS_URL}}
             run: |
-             echo $URL
-             echo "---------------------------"
-             curl https://$URL/
-           
+               echo "URL: $URL"
+               echo "---------------------------"
+        
+               # Validate the URL format
+               if [[ -z "$URL" || ! "$URL" =~ ^https?:// ]]; then
+               echo "Error: Invalid URL format: $URL"
+               exit 1
+               fi
+        
+               # Make the curl request
+               curl "$URL/"

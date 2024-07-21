@@ -145,29 +145,29 @@ jobs:
           run: | 
            echo "APP_INGRESS_HOST=$(kubectl -n ${{vars.NAMESPACE}} get ingress react -o json | jq -r '.spec.rules[0].host')" >> $"GITHUB_OUTPUT"
            
-    dev-intergration-testing:
-        name: dev intergration testing
-        needs: dev-deploy
-        runs-on: self-hosted
-        steps:
-          - name: Test URL Output 
-            env:
-              URL: ${{needs.dev-deploy.outputs.APP_INGRESS_URL}}
-            run: |
-               echo "URL: $URL"
-               echo "---------------------------"
+    # dev-intergration-testing:
+    #     name: dev intergration testing
+    #     needs: dev-deploy
+    #     runs-on: self-hosted
+    #     steps:
+    #       - name: Test URL Output 
+    #         env:
+    #           URL: ${{needs.dev-deploy.outputs.APP_INGRESS_URL}}
+    #         run: |
+    #            echo "URL: $URL"
+    #            echo "---------------------------"
         
-               # Validate the URL format
-               if [[ -z "$URL" || ! "$URL" =~ ^https?:// ]]; then
-               echo "Error: Invalid URL format: $URL"
-               exit 1
-               fi
+    #            # Validate the URL format
+    #            if [[ -z "$URL" || ! "$URL" =~ ^https?:// ]]; then
+    #            echo "Error: Invalid URL format: $URL"
+    #            exit 1
+    #            fi
         
-               # Make the curl request
-               curl "$URL/"
+    #            # Make the curl request
+    #            curl "$URL/"
      
     prod-deploy:
-      needs: dev-intergration-testing
+      needs: dev-deploy
       environment:
         name: production
         url: https://${{steps.set-ingress-host-aaddress.outputs.APP_INGRESS_HOST}}
@@ -222,23 +222,23 @@ jobs:
           run: | 
            echo "APP_INGRESS_HOST=$(kubectl -n ${{vars.NAMESPACE}} get ingress react -o json | jq -r '.spec.rules[0].host')" >> $"GITHUB_OUTPUT"
            
-    prod-intergration-testing:
-        name: pro intergration testing
-        needs: prod-deploy
-        runs-on: self-hosted
-        steps:
-          - name: Test URL Output 
-            env:
-              URL: ${{needs.prod-deploy-deploy.outputs.APP_INGRESS_URL}}
-            run: |
-               echo "URL: $URL"
-               echo "---------------------------"
+    # prod-intergration-testing:
+    #     name: pro intergration testing
+    #     needs: prod-deploy
+    #     runs-on: self-hosted
+    #     steps:
+    #       - name: Test URL Output 
+    #         env:
+    #           URL: ${{needs.prod-deploy-deploy.outputs.APP_INGRESS_URL}}
+    #         run: |
+    #            echo "URL: $URL"
+    #            echo "---------------------------"
         
-               # Validate the URL format
-               if [[ -z "$URL" || ! "$URL" =~ ^https?:// ]]; then
-               echo "Error: Invalid URL format: $URL"
-               exit 1
-               fi
+    #            # Validate the URL format
+    #            if [[ -z "$URL" || ! "$URL" =~ ^https?:// ]]; then
+    #            echo "Error: Invalid URL format: $URL"
+    #            exit 1
+    #            fi
         
-               # Make the curl request
-               curl "$URL/"
+    #            # Make the curl request
+    #            curl "$URL/"

@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
-const OS = require('os');
-const path = require('path');
+// const OS = require('os');
+// const path = require('path');
 
 function App() {
   return (
@@ -23,30 +23,30 @@ function App() {
     </div>
   );
 }
-app.get('/',   async (req, res) => {
-  res.sendFile(path.join(__dirname, '/', 'index.html'));
-});
+// app.get('/',   async (req, res) => {
+//   res.sendFile(path.join(__dirname, '/', 'index.html'));
+// });
 
 
-app.get('/os',   function(req, res) {
-  res.setHeader('Content-Type', 'application/json');
-  res.send({
-      "os": OS.hostname(),
-      "env": process.env.NODE_ENV
-  });
-})
+// app.get('/os',   function(req, res) {
+//   res.setHeader('Content-Type', 'application/json');
+//   res.send({
+//       "os": OS.hostname(),
+//       "env": process.env.NODE_ENV
+//   });
+// })
 
-app.get('/live',   function(req, res) {
-  res.setHeader('Content-Type', 'application/json');
-  res.send({
-      "status": "live"
-  });
-})
+// app.get('/live',   function(req, res) {
+//   res.setHeader('Content-Type', 'application/json');
+//   res.send({
+//       "status": "live"
+//   });
+// })
 
-app.get('/ready',   function(req, res) {
-  res.setHeader('Content-Type', 'application/json');
-  res.send({
-      "status": "ready"
-  });
-})
+// app.get('/ready',   function(req, res) {
+//   res.setHeader('Content-Type', 'application/json');
+//   res.send({
+//       "status": "ready"
+//   });
+// })
 export default App;

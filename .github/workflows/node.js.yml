@@ -26,6 +26,8 @@ jobs:
              node-version: ${{ matrix.node-version }}
              cache: 'npm'
         - run: npm ci
+        - run: npm audit fix --force
+        - run: npm start
         - run: npm run build --if-present
     docker:
         name: Containerization
@@ -155,7 +157,7 @@ jobs:
             run: |
              echo $URL
              echo "---------------------------"
-             curl https://$URL
+             curl https://$URL/
      
     prod-deploy:
       needs: dev-intergration-testing
@@ -224,5 +226,5 @@ jobs:
             run: |
              echo $URL
              echo "---------------------------"
-             curl https://$URL
+             curl https://$URL/
            

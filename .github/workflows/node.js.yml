@@ -124,7 +124,9 @@ jobs:
           run: echo "ARGOCD_SERVER=${{ secrets.ARGOCD_SERVER }}"
         - name: Login to Argo CD
           run: |
-            argocd login localhost:4001 --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
+                argocd login ${{ secrets.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
+
+
         - name: Sync Development Application
           run: |
             argocd app sync my-react-development  --auth-token  ${{ secrets.ARGOCD_TOKEN }}  # Replace with your development app name
@@ -174,27 +176,7 @@ jobs:
           run: | 
            echo "APP_INGRESS_HOST=$(kubectl -n ${{vars.NAMESPACE}} get ingress react -o json | jq -r '.spec.rules[0].host')" >> $"GITHUB_OUTPUT"
            
-    # dev-intergration-testing:
-    #     name: dev intergration testing
-    #     needs: dev-deploy
-    #     runs-on: self-hosted
-    #     steps:
-    #       - name: Test URL Output 
-    #         env:
-    #           URL: ${{needs.dev-deploy.outputs.APP_INGRESS_URL}}
-    #         run: |
-    #            echo "URL: $URL"
-    #            echo "---------------------------"
-        
-    #            # Validate the URL format
-    #            if [[ -z "$URL" || ! "$URL" =~ ^https?:// ]]; then
-    #            echo "Error: Invalid URL format: $URL"
-    #            exit 1
-    #            fi
-        
-    #            # Make the curl request
-    #            curl "$URL/"
-     
+   
     prod-deploy:
       needs: dev-deploy
       environment:
@@ -228,7 +210,8 @@ jobs:
 
         - name: Login to Argo CD
           run: |
-           argocd login localhost:4001 --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
+           argocd login ${{ secrets.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
+
         - name: Sync Production Application
           run: |
            argocd app sync my-react-production  --auth-token ${{ secrets.ARGOCD_TOKEN }} # Replace with your production app name
@@ -277,24 +260,3 @@ jobs:
           id: set-ingress-host-aaddress
           run: | 
            echo "APP_INGRESS_HOST=$(kubectl -n ${{vars.NAMESPACE}} get ingress react -o json | jq -r '.spec.rules[0].host')" >> $"GITHUB_OUTPUT"
-           
-    # prod-intergration-testing:
-    #     name: pro intergration testing
-    #     needs: prod-deploy
-    #     runs-on: self-hosted
-    #     steps:
-    #       - name: Test URL Output 
-    #         env:
-    #           URL: ${{needs.prod-deploy-deploy.outputs.APP_INGRESS_URL}}
-    #         run: |
-    #            echo "URL: $URL"
-    #            echo "---------------------------"
-        
-    #            # Validate the URL format
-    #            if [[ -z "$URL" || ! "$URL" =~ ^https?:// ]]; then
-    #            echo "Error: Invalid URL format: $URL"
-    #            exit 1
-    #            fi
-        
-    #            # Make the curl request
-    #            curl "$URL/"

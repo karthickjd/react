@@ -101,15 +101,26 @@ jobs:
         - name: Checkout Repo
           uses: actions/checkout@v4
 
-        - name: Install Argo CD CLI
-          uses: imajeetyadav/argocd-cli@v1
+        - name: Cache Argo CD CLI
+          id: cache-argo-cd
+          uses: actions/cache@v2
           with:
-            version: v2.5.7  # Optional: specify the version
-        
+            path: ~/bin/argocd
+            key: ${{ runner.os }}-argocd-${{ hashFiles('**/argocd-version.txt') }}
+        - name: Install Argo CD CLI
+          if: steps.cache-argo-cd.outputs.cache-hit != 'true'
+          run: |
+            ARGCD_VERSION=2.5.7
+            mkdir -p ~/bin
+            curl -sSL -o ~/bin/argocd "https://github.com/argoproj/argo-cd/releases/download/v${ARGCD_VERSION}/argocd-linux-amd64"
+            chmod +x ~/bin/argocd
+            echo $ARGCD_VERSION > argocd-version.txt
+        - name: Add Argo CD CLI to PATH
+          run: echo "::add-path::~/bin"
         - name: Login to Argo CD
           run: |
-            argocd login ${{ secrets.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
-    
+           argocd login ${{ secrets.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
+        
         - name: Sync Development Application
           run: |
             argocd app sync my-react-development  # Replace with your development app name
@@ -191,20 +202,30 @@ jobs:
       steps:
         - name: Checkout Repo
           uses: actions/checkout@v4
-
-        - name: Install Argo CD CLI
-          uses: imajeetyadav/argocd-cli@v1
+        - name: Cache Argo CD CLI
+          id: cache-argo-cd
+          uses: actions/cache@v2
           with:
-            version: v2.5.7  # Optional: specify the version
-            
+           path: ~/bin/argocd
+           key: ${{ runner.os }}-argocd-${{ hashFiles('**/argocd-version.txt') }}
+        - name: Install Argo CD CLI
+          if: steps.cache-argo-cd.outputs.cache-hit != 'true'
+          run: |
+           ARGCD_VERSION=2.5.7
+           mkdir -p ~/bin
+           curl -sSL -o ~/bin/argocd "https://github.com/argoproj/argo-cd/releases/download/v${ARGCD_VERSION}/argocd-linux-amd64"
+           chmod +x ~/bin/argocd
+           echo $ARGCD_VERSION > argocd-version.txt
+        - name: Add Argo CD CLI to PATH
+          run: echo "::add-path::~/bin"
         - name: Login to Argo CD
           run: |
-            argocd login ${{ secrets.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
+           argocd login ${{ secrets.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
         - name: Sync Production Application
           run: |
-            argocd app sync my-react-production  # Replace with your production app name
-            argocd app wait my-react-production --timeout 300  # Wait for the app to be in sync
-           
+           argocd app sync my-react-production  # Replace with your production app name
+           argocd app wait my-react-production --timeout 300  # Wait for the app to be in sync
+       
         - name: Install kubectl CLI
           uses: azure/setup-kubectl@v3
           with:

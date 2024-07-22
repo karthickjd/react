@@ -129,8 +129,8 @@ jobs:
 
         - name: Sync Development Application
           run: |
-            argocd app sync my-react-development  --auth-token  ${{ secrets.ARGOCD_TOKEN }}  # Replace with your development app name
-            argocd app wait my-react-development  --auth-token  ${{ secrets.ARGOCD_TOKEN }}  --timeout 300  # Wait for the app to be in sync
+            argocd app sync my-react-development  --auth-token  ${{ secrets.ARGOCD_TOKEN }} --namespace  ${{vars.NAMESPACE}} --replicas ${{vars.REPLICAS}} # Replace with your development app name
+            argocd app wait my-react-development  --auth-token  ${{ secrets.ARGOCD_TOKEN }}  --namespace  ${{vars.NAMESPACE}} --replicas ${{vars.REPLICAS}}  --timeout 300  # Wait for the app to be in sync
 
         - name: Install kubectl CLI
           uses: azure/setup-kubectl@v3

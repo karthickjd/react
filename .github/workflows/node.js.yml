@@ -127,8 +127,8 @@ jobs:
             argocd login localhost:4001 --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
         - name: Sync Development Application
           run: |
-            argocd app sync my-react-development  # Replace with your development app name
-            argocd app wait my-react-development --timeout 300  # Wait for the app to be in sync
+            argocd app sync my-react-development  --auth-token  ${{ secrets.ARGOCD_TOKEN }}  # Replace with your development app name
+            argocd app wait my-react-development  --auth-token  ${{ secrets.ARGOCD_TOKEN }}  --timeout 300  # Wait for the app to be in sync
 
         - name: Install kubectl CLI
           uses: azure/setup-kubectl@v3
@@ -231,8 +231,8 @@ jobs:
            argocd login localhost:4001 --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
         - name: Sync Production Application
           run: |
-           argocd app sync my-react-production  # Replace with your production app name
-           argocd app wait my-react-production --timeout 300  # Wait for the app to be in sync
+           argocd app sync my-react-production  --auth-token ${{ secrets.ARGOCD_TOKEN }} # Replace with your production app name
+           argocd app wait my-react-production  --auth-token ${{ secrets.ARGOCD_TOKEN }} --timeout 300  # Wait for the app to be in sync
        
         - name: Install kubectl CLI
           uses: azure/setup-kubectl@v3

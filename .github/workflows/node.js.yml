@@ -7,7 +7,6 @@ on:
       - main
       - 'feature'
       
-    
 jobs:
     unit-testing:
         name: Unit Testing

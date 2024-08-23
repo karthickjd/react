@@ -4,9 +4,9 @@ metadata:
   labels:
     app: react
   name: react
-  namespace: _{_NAMESPACE_}_
+  namespace: production
 spec:
-  replicas: _{_REPLICAS_}_
+  replicas: 3
   selector:
     matchLabels:
       app: react
